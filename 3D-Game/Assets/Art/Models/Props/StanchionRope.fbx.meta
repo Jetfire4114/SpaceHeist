@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e952fdc4de2eac24494dec3b3720841d
+guid: 2cb565569f66c49438c12a7dcfd82cb9
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
@@ -7,13 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Glass
-    second: {fileID: 2100000, guid: 23fc220e0d027134d8e1061fac92087f, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: M_HallwayAssets
-    second: {fileID: 2100000, guid: c4096f0c4888b474a96253f2c74b97c4, type: 2}
+      name: lambert1
+    second: {fileID: 2100000, guid: be28eeff53e50ca4983a4bd38bfc0464, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -45,7 +40,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 0.65
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -98,7 +93,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 1
+    globalScale: 0.0064999997
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
