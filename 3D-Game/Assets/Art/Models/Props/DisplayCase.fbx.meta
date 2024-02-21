@@ -7,8 +7,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Glass
+    second: {fileID: 2100000, guid: 23fc220e0d027134d8e1061fac92087f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: M_HallwayAssets
-    second: {fileID: 2100000, guid: d03ca8ac03d416945a50a012f2c75b88, type: 2}
+    second: {fileID: 2100000, guid: c4096f0c4888b474a96253f2c74b97c4, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
