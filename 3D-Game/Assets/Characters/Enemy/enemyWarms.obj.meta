@@ -3,7 +3,37 @@ guid: 8b2c7d03bf8e1704994686a2aec3aafa
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: arms_pCylinder8Mat
+    second: {fileID: 2100000, guid: 6a831bd39151b694186ace292636c359, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: arms_pCylinder9Mat
+    second: {fileID: 2100000, guid: 6a831bd39151b694186ace292636c359, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: enemy_midpoly_pSphere2Mat
+    second: {fileID: 2100000, guid: 6a831bd39151b694186ace292636c359, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pCube6_enemy_midpolyMat
+    second: {fileID: 2100000, guid: 6a831bd39151b694186ace292636c359, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pCylinder3Mat
+    second: {fileID: 2100000, guid: 6a831bd39151b694186ace292636c359, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pCylinder5_armsMat
+    second: {fileID: 2100000, guid: 6a831bd39151b694186ace292636c359, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
