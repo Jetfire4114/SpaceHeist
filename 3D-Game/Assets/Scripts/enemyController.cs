@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -13,40 +11,38 @@ public class enemyController : MonoBehaviour
     public Transform[] navPoint;
     public UnityEngine.AI.NavMeshAgent agent;
     public Transform goal;
-    public static float enemyHealth;
+    public GameObject enemyStunVFX;
 
-    public GameObject enemyStunVFX; // Reference to the EnemyStunVFX GameObject
-
+    private GameController gameController;
     private bool isPaused = false;
     private int spacePressCounter = 0;
-    private const int maxSpacePresses = 2;
+    public int maxSpacePresses = 3;
     private float pauseEndTime = 0f;
-    private Vector3 pausedVelocity;
     private int destPoint = 0;
-
     public TMP_Text spacePressCounterText;
 
     void Start()
     {
-        enemyHealth = 100;
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         agent.destination = goal.position;
         agent.autoBraking = false;
         UpdateSpacePressCounterText();
 
-        // Ensure the EnemyStunVFX starts off deactivated
         if (enemyStunVFX != null)
         {
             enemyStunVFX.SetActive(false);
         }
+
+        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
     }
 
     void Update()
     {
-        Debug.Log(enemyHealth);
-
-        if (enemyHealth <= 0)
-            Destroy(gameObject);
+        if (gameController.winCanvas.activeSelf)
+        {
+            PauseEnemies();
+            return;
+        }
 
         if (Input.GetKeyDown(KeyCode.Space) && spacePressCounter < maxSpacePresses)
         {
@@ -54,9 +50,7 @@ public class enemyController : MonoBehaviour
             UpdateSpacePressCounterText();
             isPaused = true;
             pauseEndTime = Time.time + 4f;
-            // Pause NavMeshAgent movement
             agent.isStopped = true;
-            // Activate EnemyStunVFX
             if (enemyStunVFX != null)
             {
                 enemyStunVFX.SetActive(true);
@@ -66,9 +60,7 @@ public class enemyController : MonoBehaviour
         if (isPaused && Time.time >= pauseEndTime)
         {
             isPaused = false;
-            // Resume NavMeshAgent movement
             agent.isStopped = false;
-            // Deactivate EnemyStunVFX
             if (enemyStunVFX != null)
             {
                 enemyStunVFX.SetActive(false);
@@ -92,11 +84,15 @@ public class enemyController : MonoBehaviour
                     Chase();
                 }
                 else
+                {
                     GotoNextPoint();
+                }
             }
 
             if (agent.remainingDistance < 0.5f)
+            {
                 GotoNextPoint();
+            }
         }
     }
 
@@ -108,7 +104,9 @@ public class enemyController : MonoBehaviour
     void GotoNextPoint()
     {
         if (navPoint.Length == 0)
+        {
             return;
+        }
         agent.destination = navPoint[destPoint].position;
         destPoint = (destPoint + 1) % navPoint.Length;
     }
@@ -124,5 +122,15 @@ public class enemyController : MonoBehaviour
         {
             spacePressCounterText.text = "S.T.U.N. Remaining: " + (maxSpacePresses - spacePressCounter);
         }
+    }
+
+    public void UpdateSpacePressCounterUI()
+    {
+        UpdateSpacePressCounterText();
+    }
+
+    void PauseEnemies()
+    {
+        agent.isStopped = true;
     }
 }

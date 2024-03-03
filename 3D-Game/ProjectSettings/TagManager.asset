@@ -7,6 +7,16 @@ TagManager:
   - Enemy
   - EnemyVision
   - EnemyStunVFX
+  - Enemy1
+  - Enemy2
+  - Enemy3
+  - EnemyTest
+  - Gem
+  - Exit
+  - Win Collider
+  - GemCollectCollider
+  - Win
+  - Escape
   layers:
   - Default
   - TransparentFX
