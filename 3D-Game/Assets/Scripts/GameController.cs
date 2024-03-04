@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour
     public GameObject normalCanvas;
     public GameObject hardCanvas;
     public GameObject tazerCollect;
+    public AudioSource introVoice;
 
     private bool gamePaused = true;
     private PlayerMovement playerMovementScript;
@@ -64,6 +65,12 @@ public class GameController : MonoBehaviour
             {
                 backgroundMusic.Play();
             }
+
+            // Check if introVoice is not playing and play it if needed
+            if (!introVoice.isPlaying)
+            {
+                introVoice.Play();
+            }
         }
         else
         {
@@ -71,6 +78,12 @@ public class GameController : MonoBehaviour
             if (backgroundMusic.isPlaying)
             {
                 backgroundMusic.Stop();
+            }
+
+            // Stop playing introVoice if the conditions are not met
+            if (introVoice.isPlaying)
+            {
+                introVoice.Stop();
             }
         }
     }
