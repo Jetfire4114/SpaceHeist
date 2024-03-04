@@ -6,54 +6,72 @@ public class GameController : MonoBehaviour
     public GameObject mainMenuCanvas;
     public GameObject pauseCanvas;
     public GameObject player;
-    public GameObject gameOverCanvas; // Reference to the Game Over canvas
-    public GameObject winCanvas; // Reference to the Win canvas
-    public GameObject escapeCanvas; // Reference to the Escape canvas
-    public GameObject aboutMMCanvas; // Reference to the About Main Menu canvas
-    public GameObject optionsMenuCanvas; // Reference to the Options Menu canvas
-    public GameObject enemyOne; // Reference to the enemy object
+    public GameObject gameOverCanvas;
+    public GameObject winCanvas;
+    public GameObject escapeCanvas;
+    public GameObject aboutMMCanvas;
+    public GameObject optionsMenuCanvas;
+    public GameObject enemyOne;
     public GameObject enemyTwo;
     public GameObject enemyThree;
-    public GameObject gem; // Reference to the gem object
-    public GameObject winCollider; // Reference to the Win Collider object
-    public enemyController enemyControllerScript; // Reference to the enemyController script
+    public GameObject gem;
+    public GameObject winCollider;
+    public enemyController enemyControllerScript;
     public AudioSource gemCollectAudio;
+    public AudioSource backgroundMusic;
+    public GameObject easyCanvas;
+    public GameObject normalCanvas;
+    public GameObject hardCanvas;
+    public GameObject tazerCollect;
 
     private bool gamePaused = true;
     private PlayerMovement playerMovementScript;
 
     void Start()
     {
-        // Ensure the game starts paused and the Main Menu canvas is active
         PauseGame();
         mainMenuCanvas.SetActive(true);
         pauseCanvas.SetActive(false);
-        gameOverCanvas.SetActive(false); // Ensure Game Over canvas is initially inactive
-        winCanvas.SetActive(false); // Ensure Win canvas is initially inactive
-        escapeCanvas.SetActive(false); // Ensure Escape canvas is initially inactive
-        aboutMMCanvas.SetActive(false); // Ensure About Main Menu canvas is initially inactive
-        optionsMenuCanvas.SetActive(false); // Ensure Options Menu canvas is initially inactive
-
-        // Get the PlayerMovement script attached to the player GameObject
+        gameOverCanvas.SetActive(false);
+        winCanvas.SetActive(false);
+        escapeCanvas.SetActive(false);
+        aboutMMCanvas.SetActive(false);
+        optionsMenuCanvas.SetActive(false);
         playerMovementScript = player.GetComponent<PlayerMovement>();
     }
 
     void Update()
     {
-        // Check for player input to toggle pause
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePause();
         }
 
-        // Check for collision with enemyOne, enemyTwo, or enemyThree
         if (!gamePaused)
         {
             CheckCollisionWithEnemy(enemyOne);
             CheckCollisionWithEnemy(enemyTwo);
             CheckCollisionWithEnemy(enemyThree);
             CheckGemCollision();
-            CheckWinCollision(); // Check for collision with WinCollider
+            CheckWinCollision();
+            CheckTazerCollision();
+        }
+
+        // Check if game is unpaused, Main Menu Canvas is not active, and neither WinCanvas nor GameOver canvas is active, then play background music
+        if (!gamePaused && !mainMenuCanvas.activeSelf && !winCanvas.activeSelf && !gameOverCanvas.activeSelf)
+        {
+            if (!backgroundMusic.isPlaying)
+            {
+                backgroundMusic.Play();
+            }
+        }
+        else
+        {
+            // If the game is paused, Main Menu Canvas is active, or WinCanvas or GameOver canvas is active, stop playing background music
+            if (backgroundMusic.isPlaying)
+            {
+                backgroundMusic.Stop();
+            }
         }
     }
 
@@ -103,7 +121,7 @@ public class GameController : MonoBehaviour
         if (gem != null)
         {
             float distance = Vector3.Distance(player.transform.position, gem.transform.position);
-            if (distance < 1.0f) // Adjust the threshold as needed
+            if (distance < 1.5f) // Adjust the threshold as needed
             {
                 Debug.Log("Player collected the gem!");
                 escapeCanvas.SetActive(true); // Activate the Escape canvas
@@ -138,6 +156,28 @@ public class GameController : MonoBehaviour
         }
     }
 
+    void CheckTazerCollision()
+    {
+        if (tazerCollect != null)
+        {
+            float distance = Vector3.Distance(player.transform.position, tazerCollect.transform.position);
+            if (distance < 1.5f) // Adjust the threshold as needed
+            {
+                Debug.Log("Player collected the tazer!");
+
+                // Find all game objects with the tag "Tazer" and destroy them
+                GameObject[] tazers = GameObject.FindGameObjectsWithTag("Tazer");
+                foreach (GameObject tazer in tazers)
+                {
+                    Destroy(tazer);
+                }
+
+                // Add your logic here for what happens when the player collects the tazer
+            }
+        }
+    }
+
+
     public void StartGame()
     {
         // Deactivate Main Menu canvas and unpause the game
@@ -145,11 +185,18 @@ public class GameController : MonoBehaviour
         UnpauseGame();
     }
 
+
     void PauseGame()
     {
         Time.timeScale = 0f; // Pause the game
         gamePaused = true;
         pauseCanvas.SetActive(true); // Activate the Pause canvas
+
+        // Stop playing background music
+        if (backgroundMusic != null)
+        {
+            backgroundMusic.Pause();
+        }
     }
 
     void UnpauseGame()
@@ -157,6 +204,12 @@ public class GameController : MonoBehaviour
         Time.timeScale = 1f; // Resume the game
         gamePaused = false;
         pauseCanvas.SetActive(false); // Deactivate the Pause canvas
+
+        // Start playing background music
+        if (backgroundMusic != null)
+        {
+            backgroundMusic.Play();
+        }
     }
 
     void PausePlayer()
@@ -192,6 +245,11 @@ public class GameController : MonoBehaviour
         enemyControllerScript.maxSpacePresses = 10; // Change maxSpacePresses to 5 for easy difficulty
         enemyControllerScript.UpdateSpacePressCounterUI(); // Update the space press counter UI
         playerMovementScript.speed = 9f; // Change player speed to 8 for easy difficulty
+
+        normalCanvas.SetActive(false);
+        hardCanvas.SetActive(false);
+        easyCanvas.SetActive(true);
+
         optionsMenuCanvas.SetActive(false); // Deactivate the Options Menu canvas
     }
 
@@ -200,6 +258,11 @@ public class GameController : MonoBehaviour
         enemyControllerScript.maxSpacePresses = 3; // Change maxSpacePresses to 5 for easy difficulty
         enemyControllerScript.UpdateSpacePressCounterUI(); // Update the space press counter UI
         playerMovementScript.speed = 5f; // Change player speed to default (5) for normal difficulty
+
+        easyCanvas.SetActive(false);
+        hardCanvas.SetActive(false);
+        normalCanvas.SetActive(true);
+
         optionsMenuCanvas.SetActive(false); // Deactivate the Options Menu canvas
     }
 
@@ -208,6 +271,11 @@ public class GameController : MonoBehaviour
         enemyControllerScript.maxSpacePresses = 2; // Change maxSpacePresses to 5 for easy difficulty
         enemyControllerScript.UpdateSpacePressCounterUI(); // Update the space press counter UI
         playerMovementScript.speed = 4f; // Change player speed to 3 for hard difficulty
+
+        easyCanvas.SetActive(false);
+        normalCanvas.SetActive(false);
+        hardCanvas.SetActive(true);
+
         optionsMenuCanvas.SetActive(false); // Deactivate the Options Menu canvas
     }
 
